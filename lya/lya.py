@@ -96,13 +96,12 @@ class AttrDict(OrderedDict):
 	def from_string(cls, yaml_str):
 		return cls.from_data(yaml.load(yaml_str, OrderedDictYAMLLoader))
 
-	@staticmethod
-	def flatten_dict(data, path=tuple()):
+	def flatten_dict(self, data, path=tuple()):
 		dst = list()
 		for k,v in data.items():
 			k = path + (k,)
 			if isinstance(v, Mapping):
-				for v in v.flatten(k): dst.append(v)
+				for v in self.flatten_dict(v, k): dst.append(v)
 			else: dst.append((k, v))
 		return dst
 
